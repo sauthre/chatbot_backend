@@ -1,0 +1,20 @@
+{
+    "facts": {
+        "user_name": "Atul",
+        "wife": "subhashree",
+        "favourite_colour": "Blue",
+        "user_request": "store that in local memory",
+        "date_of_birth": "21/11/1995",
+        "friends_names": "mishra, shubham, noman",
+        "preferred_coding_language": "python",
+        "hobby": "travelling",
+        "workplace": "ministry of communications",
+        "address": "sant nagar new delhi"
+    },
+    "credentials": {
+        "flipkart": {
+            "user_id": "averma547",
+            "password": "get_credential"
+        }
+    }
+}
