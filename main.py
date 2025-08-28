@@ -3,20 +3,24 @@ from concurrent.futures import ThreadPoolExecutor
 from groq_agent import GroqAgent
 from Tools import TOOLS  # Your tools dictionary
 import os
-
-GROQ_KEY = os.environ.get("GROQ_KEY")  # now key comes from environment
-groq_agent = GroqAgent(api_key=GROQ_KEY)
-
+from flask_cors import CORS
 
 # --- Initialize Flask App ---
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})  # enable CORS
 
 # --- Initialize GroqAgent ---
+GROQ_KEY = os.environ.get("GROQ_KEY")  # key comes from environment
+if not GROQ_KEY:
+    raise ValueError("GROQ_KEY environment variable is not set!")
 
+groq_agent = GroqAgent(api_key=GROQ_KEY)
 executor = ThreadPoolExecutor(max_workers=2)
 
-conversation_history = {}  # global conversation dict
+# --- Global conversation history ---
+conversation_history = {}  # store last 20 messages per user
 
+# --- Routes ---
 @app.route("/", methods=["GET"])
 def home():
     return "✅ API is running! Use POST /chat to interact."
@@ -29,19 +33,13 @@ def chat():
 
     history = conversation_history.get(user_id, [])
 
-    # Run GroqAgent in ThreadPoolExecutor to mimic async Telegram behavior
+    # Run GroqAgent synchronously
     def run_agent():
         return groq_agent.handle_request(user_input, history)
 
-    result, updated_history = run_agent()  # synchronous call for Flask
+    result, updated_history = run_agent()
     conversation_history[user_id] = updated_history[-20:]  # keep last 20 messages
 
     return jsonify({"reply": str(result)})
 
-if __name__ == "__main__":
-    # Enable CORS if you want the frontend to work
-    from flask_cors import CORS
-    CORS(app, resources={r"/*": {"origins": "*"}})
-
-    print("Flask API is running...")
-    app.run(host="0.0.0.0", port=5000)
+# --- No app.run() needed for Render / Gunicorn ---
