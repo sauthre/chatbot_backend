@@ -1,8 +1,7 @@
 from Groq_ai import SearchAgent
 from local_memory import LocalMemory
-from Scrappingscripts.maps import MapsScraper
-from Scrappingscripts.Wiki import WikipediaFetcher
-from Scrappingscripts.googlesearchone import GoogleSearcher
+from Wiki import WikipediaFetcher
+from googlesearchone import GoogleSearcher
 # ------------------ Keys ------------------
 SERP_KEY = "8594b0ba672133b4a15bdbb93d48f94a38c98ab4fbb00fc4884a957122c66233"
 GROQ_KEY = "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"
@@ -125,11 +124,6 @@ def search_query(query: str) -> str:
 
 # ------------------ TOOLS Dictionary ------------------
 TOOLS = {
-    # "search": {
-    #     "description": "Searches the web and summarizes results using SerpAPI + Groq",
-    #     "params": {"query": "string"},
-    #     "func": search_query
-    # },
     "google_search": {
         "description": "Searches the web and summarizes results using Google API and returns combined snippets or results",
         "params": {
@@ -155,11 +149,6 @@ TOOLS = {
         },
         "func": memory_tool
     },
-    "maps_scraper": {
-        "description": "Scrapes Google Maps for a given address, returning name, website, phone, and working hours",
-        "params": {"address": "string"},
-        "func": scrape_address_tool
-    },
     "wikipedia": {
         "description": "Fetches Wikipedia content for a given query and returns plain text",
         "params": {"query": "string"},
@@ -178,5 +167,6 @@ TOOLS = {
     "func": abuse_generator_tool
 }
 }
+
 
 
