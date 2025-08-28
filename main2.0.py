@@ -2,13 +2,17 @@ from flask import Flask, request, jsonify
 from concurrent.futures import ThreadPoolExecutor
 from groq_agent import GroqAgent
 from Tools import TOOLS  # Your tools dictionary
+import os
+
+GROQ_KEY = os.environ.get("GROQ_KEY")  # now key comes from environment
+groq_agent = GroqAgent(api_key=GROQ_KEY)
+
 
 # --- Initialize Flask App ---
 app = Flask(__name__)
 
 # --- Initialize GroqAgent ---
-GROQ_KEY = "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"
-groq_agent = GroqAgent(api_key=GROQ_KEY)
+
 executor = ThreadPoolExecutor(max_workers=2)
 
 conversation_history = {}  # global conversation dict
