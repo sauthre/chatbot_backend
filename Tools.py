@@ -1,6 +1,5 @@
 from Groq_ai import SearchAgent
 from local_memory import LocalMemory
-from playwright.sync_api import sync_playwright
 from Scrappingscripts.maps import MapsScraper
 from Scrappingscripts.Wiki import WikipediaFetcher
 from Scrappingscripts.googlesearchone import GoogleSearcher
@@ -179,4 +178,5 @@ TOOLS = {
     "func": abuse_generator_tool
 }
 }
+
 
