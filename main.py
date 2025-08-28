@@ -3,11 +3,11 @@ from concurrent.futures import ThreadPoolExecutor
 from groq_agent import GroqAgent
 from Tools import TOOLS  # Your tools dictionary
 import os
+from flask import Flask
 from flask_cors import CORS
 
-# --- Initialize Flask App ---
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # enable CORS
+CORS(app)  # Al
 
 # --- Initialize GroqAgent ---
 GROQ_KEY = os.environ.get("GROQ_KEY")  # key comes from environment
@@ -43,3 +43,4 @@ def chat():
     return jsonify({"reply": str(result)})
 
 # --- No app.run() needed for Render / Gunicorn ---
+
