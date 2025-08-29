@@ -1,5 +1,7 @@
 # google_search.py
 import requests
+import os
+from dotenv import load_dotenv
 
 class GoogleSearcher:
     def __init__(self, api_key: str, cse_id: str):
@@ -43,10 +45,13 @@ class GoogleSearcher:
         combined_snippets = " ".join(snippets)[:snippet_limit]
         return {"results": results, "combined_snippets": combined_snippets}
 
+
 # Example usage
 if __name__ == "__main__":
-    API_KEY = "AIzaSyAXAb7aeVjs6Ix91bHvbzWSgtf_Pk1Nrag"
-    CSE_ID = "46d399959e73a40e8"
+    load_dotenv()  # Load from .env
+
+    API_KEY = os.getenv("GOOGLE_API_KEY")
+    CSE_ID = os.getenv("GOOGLE_CSE_ID")
 
     searcher = GoogleSearcher(API_KEY, CSE_ID)
     query = "Amitabh Bachchan"
