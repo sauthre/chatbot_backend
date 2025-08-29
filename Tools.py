@@ -20,9 +20,7 @@ def abuse_generator_tool(user_message: str, tone: str = "medium") -> str:
     """
     # Direct abusive corpus string (extend as needed)
     abusive_corpus = """
-    bewakoof, chutiya, pagal, nalayak, baklol, harami, gadha, haramzada, khota,
-    kamina, murkh, chichora, faltu, bawli, loda, gandu, chutmar, madarchod, 
-    harami kutta, saale, bhosdike, etc...
+    bewakoof, pagal, nalayak, baklol, harami
     """
 
     # Build prompt for Groq
@@ -168,6 +166,7 @@ TOOLS = {
     "func": abuse_generator_tool
 }
 }
+
 
 
 
