@@ -5,12 +5,13 @@ from googlesearchone import GoogleSearcher
 # ------------------ Keys ------------------
 import os
 GROQ_KEY = os.environ.get("GROQ_KEY") 
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+GOOGLE_CSE_ID = os.environ.get("GOOGLE_CSE_ID")
 
 # ------------------ Agents ------------------
-groq_agent = SearchAgent(SERP_KEY, GROQ_KEY)
 memory = LocalMemory()
-google_searcher = GoogleSearcher("AIzaSyAXAb7aeVjs6Ix91bHvbzWSgtf_Pk1Nrag", "46d399959e73a40e8")
 
+google_searcher = GoogleSearcher(GOOGLE_API_KEY, GOOGLE_CSE_ID)
 # ------------------ Abuse Generator Tool ------------------
 # ------------------ Abuse Generator Tool ------------------
 def abuse_generator_tool(user_message: str, tone: str = "medium") -> str:
@@ -37,7 +38,7 @@ Do NOT exceed 150 words.
 
     # Directly create a new Groq client call instead of using groq_agent
     from groq import Groq
-    groq_client = Groq(api_key="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")  # Use same key as groq_agent
+    groq_client = Groq(api_key=GROQ_KEY)  # Use same key as groq_agent
     response = groq_client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[
@@ -167,6 +168,7 @@ TOOLS = {
     "func": abuse_generator_tool
 }
 }
+
 
 
 
