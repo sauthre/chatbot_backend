@@ -1,5 +1,5 @@
 import json
-from groq import Groq
+from groq import Groq, RateLimitError   # ✅ added RateLimitError
 from Tools import TOOLS
 from difflib import SequenceMatcher
 
@@ -45,36 +45,41 @@ class GroqAgent:
     {{"tool": "<tool_name>", "args": {{...}}}}
     - If no tool is needed, respond with: {{"tool": "none"}}
     """
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": "You are a helpful AI agent that selects the correct tool."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0
-        )
-
-        response_text = response.choices[0].message.content
-        cleaned = self.clean_json(response_text)
-
-        try:
+        try:   # ✅ added try/except
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": "You are a helpful AI agent that selects the correct tool."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0
+            )
+            response_text = response.choices[0].message.content
+            cleaned = self.clean_json(response_text)
             return json.loads(cleaned)
+        except RateLimitError as e:   # ✅ handle rate limit
+            print(f"Rate limit reached: {e}")
+            return {"tool": "none", "error": "Rate limit exceeded. Please try again later."}
         except json.JSONDecodeError:
             return {"tool": "none"}
 
     def generate_final_answer(self, user_input: str, tool_result: str, history: list) -> str:
         prompt = f"Tool returned: {tool_result}\nRespond in a helpful and conversational way."
 
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": "You are a friendly and curious assistant."},
-                *history,  # pass full conversation history
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.7
-        )
-        return response.choices[0].message.content
+        try:   # ✅ added try/except
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": "You are a friendly and curious assistant."},
+                    *history,  # pass full conversation history
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.7
+            )
+            return response.choices[0].message.content
+        except RateLimitError as e:   # ✅ handle rate limit
+            print(f"Rate limit reached: {e}")
+            return "⚠️ Server is busy (rate limit exceeded). Please try again in a few minutes."
 
     def handle_request(self, user_input: str, history: list = None) -> str:
         if history is None:
