@@ -3,8 +3,8 @@ from local_memory import LocalMemory
 from Wiki import WikipediaFetcher
 from googlesearchone import GoogleSearcher
 # ------------------ Keys ------------------
-SERP_KEY = "8594b0ba672133b4a15bdbb93d48f94a38c98ab4fbb00fc4884a957122c66233"
-GROQ_KEY = "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"
+import os
+GROQ_KEY = os.environ.get("GROQ_KEY") 
 
 # ------------------ Agents ------------------
 groq_agent = SearchAgent(SERP_KEY, GROQ_KEY)
@@ -167,6 +167,7 @@ TOOLS = {
     "func": abuse_generator_tool
 }
 }
+
 
 
 
