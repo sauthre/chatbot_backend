@@ -4,7 +4,7 @@ from Tools import TOOLS
 from difflib import SequenceMatcher
 
 class GroqAgent:
-    def __init__(self, api_key: str, model: str = "llama-3.3-70b-versatile"):
+    def __init__(self, api_key: str, model: str = "meta-llama/llama-guard-4-12b"):
         self.client = Groq(api_key=api_key)
         self.model = model
         self.last_tool_result = None
@@ -109,3 +109,4 @@ class GroqAgent:
         history.append({"role": "assistant", "content": final_answer})
 
         return final_answer, history
+
